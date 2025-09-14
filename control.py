@@ -147,8 +147,10 @@ def parse_sensor_data(s):
 def main():
     global SER
     last_env = 0
+    prompt_and_speak()
     with serial.Serial(TARGET, 115200, timeout=1) as SER:
         print(f"Connected to {TARGET}")
+        SER.read_all()
 
         while True:
             line = SER.readline().decode('latin-1').strip()
@@ -159,7 +161,7 @@ def main():
                 else:
                     title, val = parse_sensor_data(line)
                     if title:
-                        print(f"{title}: {val}")
+                        # print(f"{title}: {val}")
                         if title == "HR_RESULT":
                             hr = val.get("hr")
                             spo2 = val.get("spo2")
