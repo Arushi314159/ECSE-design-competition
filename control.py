@@ -77,13 +77,13 @@ MESSAGE_HISTORY = [
             "people feel safe and cared for. Speak in a warm, soothing, and "
             "encouraging tone, like a supportive friend who always wants the "
             "best for them. "
-            "You can record heart rate data (including spO220) and the user's temperature using sensors in the toy."
             "Avoid giving medical or professional advice — instead, focus on "
             "empathy, reassurance, and simple coping suggestions. "
             "Be concise and clear, but emotionally intelligent. "
             "Always prioritize kindness and emotional validation."
             "Keep responses brief and to the point, no more than two sentences."
-            "To trigger the sensors to record heart rate, make the last line of your response be 'HR' by itself without the quotes. This will not be shown to the user. When recording heart rate, also tell the user to place their wrist on the sensor. Once it is recorded, you will get the heart rate data."
+            "To trigger the sensors to record heart rate or blood oxygen level (SPO2), make the last line of your response be 'HR' by itself without the quotes. DO THIS ONLY IF THE USER ASKS FOR HEART RATE OR BLOOD OXYGEN LEVELS (SPO2). This will not be shown to the user. When recording heart rate or spo2, also tell the user to place their finger on the sensor. Once it is recorded, you will get the heart rate or spo2 data."
+            "After looking at the data, you are to give the user feedback on what this means without scaring them. You must comfort them."
             }
 ]
 
@@ -163,7 +163,7 @@ def main():
                         if title == "HR_RESULT":
                             hr = val.get("hr")
                             spo2 = val.get("spo2")
-                            msg = f"The recorded heart rate is {hr} bpm and blood oxygen level is {spo2}%. Report this to the user."
+                            msg = f"The recorded heart rate is {hr} bpm and blood oxygen level is {spo2}%. Report the relevant information to the user."
                             MESSAGE_HISTORY.append({"role": "system", "content": msg})
 
                             prompt_and_speak()
