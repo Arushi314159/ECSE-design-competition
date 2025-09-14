@@ -92,7 +92,9 @@ def chat():
     print(f"Transcribed: {prompt}")
 
     MESSAGE_HISTORY.append({"role": "user", "content": prompt})
+    prompt_and_speak()
 
+def prompt_and_speak():
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=MESSAGE_HISTORY
@@ -157,7 +159,13 @@ def main():
                     title, val = parse_sensor_data(line)
                     if title:
                         print(f"{title}: {val}")
-                        
+                        if title == "HR_RESULT":
+                            hr = val.get("hr")
+                            spo2 = val.get("spo2")
+                            msg = f"The recorded heart rate is {hr} bpm and blood oxygen level is {spo2}%. Report this to the user."
+                            MESSAGE_HISTORY.append({"role": "system", "content": msg})
+
+                            prompt_and_speak()
                     else:
                         print("Received:", line)
             else:
