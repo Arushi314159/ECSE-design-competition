@@ -20,14 +20,14 @@ print("Available serial ports:")
 for port in ports:
     print(" -", port.device, port.description)
 
-TARGET = "/dev/ttyUSB0"
+TARGET = "/dev/cu.usbserial-0001"
 
 # Connect to the target serial port
 SER = None
 
 def record():
     fs = 44100       # Sample rate
-    silence_thresh = 2000  # Adjust based on mic sensitivity
+    silence_thresh = 400  # Adjust based on mic sensitivity
     silence_duration = 1  # seconds of silence before stopping
     filename = "detected_recording.wav"
 
@@ -119,7 +119,7 @@ def chat():
         response_format="wav"
     ) as response:
         response.stream_to_file("speech.wav")
-    pasimple.play_wav("speech.wav")
+    # pasimple.play_wav("speech.wav")
 
     if hr:
         SER.write(b'1\n')  # Start heart rate measurement
@@ -148,7 +148,7 @@ def main():
         print(f"Connected to {TARGET}")
 
         while True:
-            line = SER.readline().decode('utf-8').strip()
+            line = SER.readline().decode('latin-1').strip()
             if line:
                 if line == "4":
                     print("Button pressed!")
@@ -157,6 +157,7 @@ def main():
                     title, val = parse_sensor_data(line)
                     if title:
                         print(f"{title}: {val}")
+                        
                     else:
                         print("Received:", line)
             else:
