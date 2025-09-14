@@ -146,6 +146,7 @@ def parse_sensor_data(s):
 
 def main():
     global SER
+    last_env = 0
     with serial.Serial(TARGET, 115200, timeout=1) as SER:
         print(f"Connected to {TARGET}")
 
@@ -166,6 +167,15 @@ def main():
                             MESSAGE_HISTORY.append({"role": "system", "content": msg})
 
                             prompt_and_speak()
+                        elif title == "ENV":
+                            if time.time() - last_env > 20:  # every 20 seconds
+                                last_env = time.time()
+                                temp = val.get("temp")
+                                humid = val.get("humid")
+                                msg = f"The recorded temperature is {temp}°C and humidity is {humid}%. You may want to mention this to the user if relevant."
+                                MESSAGE_HISTORY.append({"role": "system", "content": msg})
+
+                            # Don't chat on every ENV reading
                     else:
                         print("Received:", line)
             else:
