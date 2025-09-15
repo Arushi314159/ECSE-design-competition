@@ -71,6 +71,12 @@ def record():
 
     return result["text"]
 
+INITIAL_GREETING = (
+    "Hello — I’m Doctor Bear, a cosy soft-toy doctor here to listen and comfort you, impact your mental and physical wellbeing positively! "
+    "If you’d like, I can check your heart rate, blood oxygen (SpO₂), or temperature — "
+    "just ask and place your finger on the sensor."
+)
+
 MESSAGE_HISTORY = [
     {"role": "system", "content": "You are a comforting AI that lives inside a soft toy doctor. "
             "Your role is to gently listen, provide emotional support, and help "
@@ -84,7 +90,8 @@ MESSAGE_HISTORY = [
             "Keep responses brief and to the point, no more than two sentences."
             "To trigger the sensors to record heart rate or blood oxygen level (SPO2), make the last line of your response be 'HR' by itself without the quotes. DO THIS ONLY IF THE USER ASKS FOR HEART RATE OR BLOOD OXYGEN LEVELS (SPO2). This will not be shown to the user. When recording heart rate or spo2, also tell the user to place their finger on the sensor. Once it is recorded, you will get the heart rate or spo2 data."
             "After looking at the data, you are to give the user feedback on what this means without scaring them. You must comfort them."
-            }
+    },
+    {"role": "assistant", "content": INITIAL_GREETING}
 ]
 
 def chat():
@@ -161,7 +168,7 @@ def main():
                 else:
                     title, val = parse_sensor_data(line)
                     if title:
-                        # print(f"{title}: {val}")
+                        print(f"{title}: {val}")
                         if title == "HR_RESULT":
                             hr = val.get("hr")
                             spo2 = val.get("spo2")
